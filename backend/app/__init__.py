@@ -19,6 +19,9 @@ def create_app(config_class=Config):
     from .routes.catalog import catalog as catalog_bp
     app.register_blueprint(catalog_bp, url_prefix='/api/catalog')
 
+    from .routes.loans import loans_bp
+    app.register_blueprint(loans_bp, url_prefix='/api/loans')
+
     with app.app_context():
         db.create_all()
     
