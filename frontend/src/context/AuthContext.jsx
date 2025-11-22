@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, use } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import apiClient from '../api/apiClient';
 
 const AuthContext = createContext(null);
@@ -24,13 +24,13 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await apiClient.post('/auth/login', { email, password });
-            const { token, role } = response.data;
+            const { access_token, role } = response.data;
 
-            localStorage.setItem('jwt_token', token);
+            localStorage.setItem('jwt_token', access_token);
             localStorage.setItem('user_role', role);
             setToken(token);
             setUser({ role: role });
-            return True;
+            return true;
         } catch (err) {
             console.error('Login error:', err);
             throw err;
