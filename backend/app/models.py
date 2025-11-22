@@ -58,6 +58,7 @@ class Loan(db.Model):
     def __init__(self, user_id, book_id, loan_period_days=14):
         self.user_id = user_id
         self.book_id = book_id
+        self.loan_date = datetime.utcnow()
         self.expiration_date = self.loan_date + timedelta(days=loan_period_days)
     
     def calculate_fine(self):

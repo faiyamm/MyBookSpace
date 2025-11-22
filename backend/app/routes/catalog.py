@@ -6,21 +6,20 @@ from ..models import Book, User
 catalog = Blueprint('catalog', __name__)
 
 # autenticacion y autorización helper
-def admin_required():
-    def wrapper(fn):
-        @jwt_required()
-        def decorator(*args, **kwargs):
-            claims = get_jwt()
-            if claims.get('role') == 'admin':
-                return fn(*args, **kwargs)
-            else:
-                return jsonify(msg='Admin privilege required'), 403
-        return decorator
+def admin_required(fn):
+    @jwt_required()
+    def wrapper(*args, **kwargs):
+        claims = get_jwt()
+        if claims.get('role') == 'admin':
+            return fn(*args, **kwargs)
+        else:
+            return jsonify(msg='Admin privilege required'), 403
+    wrapper.__name__ = fn.__name__
     return wrapper
 
 # ruta para crear libro / solo disponible para admin
 @catalog.route('/books', methods=['POST'])
-@admin_required()
+@admin_required
 def add_book():
     data = request.get_json()
 

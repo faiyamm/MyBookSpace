@@ -34,7 +34,8 @@ def login():
     user = User.query.filter_by(email=email).first()
 
     if user and check_password_hash(user.password, password):
-        access_token = create_access_token(identity=user.id, additional_claims={'rol': user.rol})
+        # identity must be a string for PyJWT; cast user.id to str
+        access_token = create_access_token(identity=str(user.id), additional_claims={'role': user.role})
         return jsonify({
             "msg": "Login successful",
             "token": access_token,

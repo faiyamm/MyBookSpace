@@ -6,12 +6,11 @@ from datetime import datetime
 
 loans_bp = Blueprint('loans', __name__)
 
-@loans_bp.route('/loans/<int:loan_id>/renew', methods=['POST'])
+@loans_bp.route('/reserve', methods=['POST'])
 @jwt_required()
-
 def book_reservation():
-    """ Endpoint to renew a loan if eligible """
-    current_user_id = get_jwt_identity()
+    """ Endpoint to reserve/borrow a book """
+    current_user_id = int(get_jwt_identity())
     data = request.get_json()
 
     book_id = data.get('book_id')
@@ -22,7 +21,7 @@ def book_reservation():
     if book.available_copies <= 0:
         return jsonify({"error": "No available copies for reservation"}), 400
 
-    loan = Loan.query.filter_by(user_id=current_user_id, book_id=book_id)
+    loan = Loan(user_id=current_user_id, book_id=book_id)
     book.available_copies -= 1
 
     db.session.add(loan)
@@ -37,7 +36,7 @@ def book_reservation():
 @jwt_required()
 def my_loans():
     """ endpoint to get all loans for the current user """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     loans = Loan.query.filter_by(user_id=current_user_id).all()
 
     return jsonify([loan.to_dict() for loan in loans]), 200
@@ -46,13 +45,13 @@ def my_loans():
 @jwt_required()
 def renew_loan(loan_id):
     """ endpoint to renew a loan if eligible """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     loan = Loan.query.get(loan_id)
 
     if not loan or loan.user_id != current_user_id:
         return jsonify({"error": "Loan not found"}), 404
     
-    if loan.renewed():
+    if loan.renewal():
         db.session.commit()
         return jsonify({
             'message': 'Loan renewed successfully',
@@ -65,7 +64,7 @@ def renew_loan(loan_id):
 @jwt_required()
 def return_loan(loan_id):
     """ endpoint to return a loaned book """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     loan = Loan.query.get(loan_id)
 
     if not loan or loan.user_id != current_user_id:
