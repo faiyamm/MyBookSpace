@@ -7,6 +7,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    first_name = db.Column(db.String(100), nullable=True)  # SQLite limitation - cannot alter to NOT NULL
+    last_name = db.Column(db.String(100), nullable=True)   # Validation handled in routes
 
     role = db.Column(db.String(50), default='User', nullable=False)
 
@@ -16,7 +18,18 @@ class User(db.Model):
     #loans = db.relationship('Loan', backref='borrower', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Usuario {self.email} - Rol: {self.rol}>'
+        return f'<User {self.first_name} {self.last_name} ({self.email}) - Role: {self.role}>'
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'full_name': f'{self.first_name} {self.last_name}',
+            'role': self.role,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
 
 class Book(db.Model):
     __tablename__ = 'Books'

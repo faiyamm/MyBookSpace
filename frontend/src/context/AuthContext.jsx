@@ -12,11 +12,11 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedToken = localStorage.getItem('jwt_token');
-        const storedRole = localStorage.getItem('user_role');
+        const storedUser = localStorage.getItem('user_data');
 
-        if (storedToken && storedRole) {
+        if (storedToken && storedUser) {
             setToken(storedToken);
-            setUser({ role: storedRole });
+            setUser(JSON.parse(storedUser));
         }
         setLoading(false);
     }, []);
@@ -24,12 +24,12 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await apiClient.post('/auth/login', { email, password });
-            const { access_token, role } = response.data;
+            const { access_token, user: userData } = response.data;
 
             localStorage.setItem('jwt_token', access_token);
-            localStorage.setItem('user_role', role);
-            setToken(token);
-            setUser({ role: role });
+            localStorage.setItem('user_data', JSON.stringify(userData));
+            setToken(access_token);
+            setUser(userData);
             return true;
         } catch (err) {
             console.error('Login error:', err);
@@ -39,6 +39,8 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('jwt_token');
+        localStorage.removeItem('user_data');
+        // Clean up old user_role key if it exists
         localStorage.removeItem('user_role');
         setToken(null);
         setUser(null);

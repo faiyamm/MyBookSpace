@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
+    const navigate = useNavigate();
     return (
         <div className="min-h-screen bg-[#FFF8E7] flex flex-col">
         {/* Header */}
@@ -15,10 +17,16 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-[#2C3E2C]">MyBookSpace</span>
             </div>
             <div className="flex gap-4">
-                <button className="px-6 py-2 text-[#5F7464] hover:text-[#2C3E2C] font-medium">
+                <button 
+                onClick={() => navigate('/login')}
+                className="px-6 py-2 text-[#5F7464] hover:text-[#2C3E2C] font-medium"
+                >
                 Sign In
                 </button>
-                <button className="px-6 py-2 bg-[#5F7464] text-white rounded-lg hover:bg-[#4A5D4A] font-medium">
+                <button 
+                onClick={() => navigate('/signup')}
+                className="px-6 py-2 bg-[#5F7464] text-white rounded-lg hover:bg-[#4A5D4A] font-medium"
+                >
                 Get Started
                 </button>
             </div>
@@ -37,7 +45,10 @@ export default function LandingPage() {
                 MyBookSpace is the modern way to experience your community library.
             </p>
             
-            <button className="px-10 py-4 bg-white text-[#5F7464] border-2 border-[#5F7464] rounded-lg hover:bg-[#5F7464] hover:text-white font-semibold text-lg transition-colors">
+            <button 
+            onClick={() => navigate('/signup')}
+            className="px-10 py-4 bg-white text-[#5F7464] border-2 border-[#5F7464] rounded-lg hover:bg-[#5F7464] hover:text-white font-semibold text-lg transition-colors"
+            >
                 Start Reading Today
             </button>
             </div>
