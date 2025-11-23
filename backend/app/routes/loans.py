@@ -80,3 +80,43 @@ def return_loan(loan_id):
         'message': 'Book returned successfully',
         'final_fine_amount': loan.fine_amount,
     }), 200
+
+@loans_bp.route('/all', methods=['GET'])
+@jwt_required()
+def get_all_loans():
+    """ endpoint to get all loans -> only for admin users """
+    current_user_id = int(get_jwt_identity())
+    user = User.query.get(current_user_id)
+
+    if user.role != 'admin':
+        return jsonify({"error": "Admin access required"}), 403
+    
+    loans = Loan.query.all()
+    return jsonify([loan.to_dict() for loan in loans]), 200
+
+@loans_bp.route('/stats', methods=['GET'])
+@jwt_required()
+def get_loan_stats():
+    """ endpoint to get loan statistics -> only for admin users """
+    current_user_id = int(get_jwt_identity())
+    user = User.query.get(current_user_id)
+
+    if user.role != 'admin':
+        return jsonify({"error": "Admin access required"}), 403
+
+    from datetime import datetime, timedelta
+    active = Loan.query.filter(Loan.status == 'On Loan').count()
+    overdue = Loan.query.filter(
+        Loan.status == 'On Loan',
+        Loan.expiration_date < datetime.utcnow()
+    ).count()
+    returned = Loan.query.filter(Loan.status == 'Returned').count()
+
+    total_fines = db.session.query(db.func.sum(Loan.fine_amount)).scalar() or 0.0
+    
+    return jsonify({
+        'active_loans': active,
+        'overdue_loans': overdue,
+        'returned_loans': returned,
+        'total_fines': float(total_fines)
+    }), 200
