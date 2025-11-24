@@ -44,6 +44,7 @@ class Book(db.Model):
 
     genre = db.Column(db.String(100))
     cover_url = db.Column(db.String(500))
+    description = db.Column(db.Text)
 
     #loans = db.relationship('Loan', backref='Book_borrowed', lazy='dynamic')
 
@@ -109,5 +110,18 @@ class Loan(db.Model):
             'return_date': self.return_date.isoformat() if self.return_date else None,
             'status': self.status,
             'fine_amount': self.fine_amount,
-            'renewals': self.renewals
+            'renewals': self.renewals,
+            'book': {
+                'id': self.book.id,
+                'title': self.book.title,
+                'author': self.book.author,
+                'isbn': self.book.isbn,
+                'cover_url': self.book.cover_url
+            } if self.book else None,
+            'user': {
+                'id': self.user.id,
+                'email': self.user.email,
+                'first_name': self.user.first_name,
+                'last_name': self.user.last_name
+            } if self.user else None
         }

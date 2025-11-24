@@ -43,7 +43,7 @@ export default function Profile() {
     };
 
     const activeLoans = loans.filter(l => l.status === 'active' || l.status === 'overdue');
-    const totalFines = loans.reduce((sum, l) => sum + (l.fine || 0), 0);
+    const totalFines = loans.reduce((sum, l) => sum + (l.fine_amount || 0), 0);
 
     if (loading) {
         return (

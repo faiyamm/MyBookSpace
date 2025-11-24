@@ -56,14 +56,19 @@ def add_book():
     if Book.query.filter_by(isbn=data['isbn']).first():
         return jsonify(msg='Book with this ISBN already exists'), 409
     
-    # If title/author not provided, try to fetch from API
-    if not data.get('title') or not data.get('author'):
+    # If title/author/cover not provided, try to fetch from API
+    if not data.get('title') or not data.get('author') or not data.get('cover_url'):
         api_data = fetch_book_by_isbn(data['isbn'])
         if api_data:
             data['title'] = data.get('title') or api_data.get('title')
             data['author'] = data.get('author') or api_data.get('author')
             data['cover_url'] = data.get('cover_url') or api_data.get('cover_url')
             data['description'] = data.get('description') or api_data.get('description')
+    
+    # If still no cover_url, generate from ISBN
+    if not data.get('cover_url') and data.get('isbn'):
+        clean_isbn = data['isbn'].replace('-', '').replace(' ', '')
+        data['cover_url'] = f'https://covers.openlibrary.org/b/isbn/{clean_isbn}-L.jpg'
     
     # Validate required fields after API fetch attempt
     if not data.get('title') or not data.get('author'):
@@ -77,7 +82,8 @@ def add_book():
         genre=data.get('genre'),
         total_copies=data['total_copies'],
         available_copies=data['total_copies'],
-        cover_url=data.get('cover_url')
+        cover_url=data.get('cover_url'),
+        description=data.get('description')
     )
     db.session.add(new_book)
     db.session.commit()
@@ -103,9 +109,31 @@ def get_books():
             'genre': book.genre,
             'total_copies': book.total_copies,
             'available_copies': book.available_copies,
-            'cover_url': book.cover_url
+            'cover_url': book.cover_url,
+            'description': book.description
         })
     return jsonify(output), 200
+
+# ruta para obtener un libro específico
+@catalog.route('/books/<int:book_id>', methods=['GET'])
+def get_book(book_id):
+    """Get a single book by ID"""
+    book = Book.query.get(book_id)
+    
+    if not book:
+        return jsonify({'error': 'Book not found'}), 404
+    
+    return jsonify({
+        'id': book.id,
+        'isbn': book.isbn,
+        'title': book.title,
+        'author': book.author,
+        'genre': book.genre,
+        'total_copies': book.total_copies,
+        'available_copies': book.available_copies,
+        'cover_url': book.cover_url,
+        'description': book.description
+    }), 200
 
 # ruta para actualizar libro (admin only)
 @catalog.route('/books/<int:book_id>', methods=['PUT'])
@@ -171,18 +199,27 @@ def update_book(book_id):
 @admin_required
 def delete_book(book_id):
     """Delete a book from catalog"""
+    from ..models import Loan
+    
     book = Book.query.get(book_id)
     
     if not book:
         return jsonify({'error': 'Book not found'}), 404
     
-    # Check if book has active loans
-    active_loans = book.total_copies - book.available_copies
+    # Check if book has active loans (On Loan or Overdue status)
+    active_loans = Loan.query.filter(
+        Loan.book_id == book_id,
+        Loan.status.in_(['On Loan', 'Overdue'])
+    ).count()
+    
     if active_loans > 0:
         return jsonify({
             'error': 'Cannot delete book with active loans',
             'active_loans': active_loans
         }), 400
+    
+    # Delete all loan history for this book first
+    Loan.query.filter_by(book_id=book_id).delete()
     
     db.session.delete(book)
     db.session.commit()

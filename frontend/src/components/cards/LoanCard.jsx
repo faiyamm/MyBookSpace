@@ -18,10 +18,8 @@ export default function LoanCard({
     id,
     book,
     loan_date,
-    due_date,
     expiration_date,
     status,
-    fine,
     fine_amount,
     renewals = 0
   } = loan;
@@ -37,8 +35,7 @@ export default function LoanCard({
   const isOverdue = status === 'overdue' || status === 'Overdue';
   const isActive = status === 'active' || status === 'On Loan';
   const canRenew = renewals < 2 && !isOverdue;
-  const fineAmount = fine || fine_amount || 0;
-  const dueDate = due_date || expiration_date;
+  const fineAmount = fine_amount || 0;
 
   const getStatusVariant = () => {
     if (isOverdue) return 'danger';
@@ -81,8 +78,8 @@ export default function LoanCard({
           
           <div className="text-sm text-[#5F7464] space-y-1 mb-3">
             <p><strong>Borrowed:</strong> {formatDate(loan_date)}</p>
-            {dueDate && (
-              <p><strong>Due:</strong> {formatDate(dueDate)}</p>
+            {expiration_date && (
+              <p><strong>Due:</strong> {formatDate(expiration_date)}</p>
             )}
             {fineAmount > 0 && (
               <p className="text-red-600">

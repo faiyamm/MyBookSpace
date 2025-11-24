@@ -8,6 +8,7 @@ import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
 import Dashboard from './pages/Dashboard';
 import BrowseBooks from './pages/BrowseBooks';
+import BookDetails from './pages/BookDetails';
 import MyLoans from './pages/MyLoans';
 import Profile from './pages/Profile';
 import AdminPanel from './pages/AdminPanel';
@@ -51,8 +52,10 @@ function AppRoutes() {
         <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><SignupPage /></PublicRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/browse" element={<ProtectedRoute><BrowseBooks /></ProtectedRoute>} />
+        <Route path="/book/:id" element={<ProtectedRoute><BookDetails /></ProtectedRoute>} />
         <Route path="/loans" element={<ProtectedRoute><MyLoans /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute adminOnly><AdminPanel /></ProtectedRoute>} />

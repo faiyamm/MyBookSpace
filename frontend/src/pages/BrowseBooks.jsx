@@ -84,7 +84,7 @@ export default function BrowseBooks() {
                 <select
                 value={selectedGenre}
                 onChange={(e) => setSelectedGenre(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                className="px-4 py-2 border border-gray-300 rounded-lg text-[#2C3E2C] focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                 >
                 <option value="">All Genres</option>
                 {genres.map(genre => (
@@ -94,7 +94,7 @@ export default function BrowseBooks() {
                 <select
                 value={availability}
                 onChange={(e) => setAvailability(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                className="px-4 py-2 border border-gray-300 rounded-lg text-[#2C3E2C] focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                 >
                 <option value="">All Books</option>
                 <option value="available">Available</option>

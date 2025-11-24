@@ -84,7 +84,7 @@ export default function Signup() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                     placeholder="John"
                     />
                 </div>
@@ -97,7 +97,7 @@ export default function Signup() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                     placeholder="Doe"
                     />
                 </div>
@@ -112,7 +112,7 @@ export default function Signup() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                     placeholder="you@example.com"
                 />
                 </div>
@@ -127,7 +127,7 @@ export default function Signup() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                     placeholder="••••••••"
                 />
                 <p className="text-xs text-[#5F7464] mt-1">At least 6 characters</p>
@@ -143,7 +143,7 @@ export default function Signup() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                     placeholder="••••••••"
                 />
                 </div>

@@ -40,7 +40,7 @@ export default function Input({
           placeholder={placeholder}
           required={required}
           disabled={disabled}
-          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464] disabled:bg-gray-100 disabled:cursor-not-allowed ${
+          className={`w-full px-4 py-3 border rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464] disabled:bg-gray-100 disabled:cursor-not-allowed ${
             Icon ? 'pl-10' : ''
           } ${
             error ? 'border-red-500' : 'border-gray-300'

@@ -28,10 +28,13 @@ def fetch_book_by_isbn(isbn):
             else:
                 book_info['description'] = data['description']
         
+        # Try to get cover URL - try multiple approaches
         if 'covers' in data and data['covers']:
             cover_id = data['covers'][0]
             book_info['cover_url'] = f'https://covers.openlibrary.org/b/id/{cover_id}-L.jpg'
-        else:
+        
+        # Always also try ISBN-based cover as fallback (might work even if covers array is empty)
+        if not book_info['cover_url']:
             book_info['cover_url'] = f'https://covers.openlibrary.org/b/isbn/{clean_isbn}-L.jpg'
 
         if 'authors' in data and data['authors']:

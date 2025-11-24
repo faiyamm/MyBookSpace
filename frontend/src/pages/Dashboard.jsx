@@ -34,16 +34,22 @@ export default function Dashboard() {
         }
     };
 
-    // Calcular estadísticas
-    const activeLoans = loans.filter(l => l.status === 'active').length;
+    // Calculate statistics - backend uses 'On Loan', 'Overdue', 'Returned'
+    const activeLoans = loans.filter(l => 
+        l.status === 'On Loan' || l.status === 'active'
+    ).length;
+    
     const dueThisWeek = loans.filter(l => {
-        if (l.status !== 'active') return false;
-        const dueDate = new Date(l.due_date);
+        if (l.status !== 'On Loan' && l.status !== 'active') return false;
+        const dueDate = new Date(l.expiration_date);
         const today = new Date();
         const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
         return dueDate >= today && dueDate <= weekFromNow;
     }).length;
-    const overdue = loans.filter(l => l.status === 'overdue').length;
+    
+    const overdue = loans.filter(l => 
+        l.status === 'Overdue' || l.status === 'overdue'
+    ).length;
 
     if (loading) {
         return (

@@ -17,9 +17,13 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-        await login(email, password);
-        // Login exitoso, el AuthContext ya guardó todo
-        navigate('/dashboard');
+        const userData = await login(email, password);
+        // Redirect based on user role
+        if (userData.role === 'admin') {
+            navigate('/admin');
+        } else {
+            navigate('/dashboard');
+        }
         } catch (err) {
         setError(err.response?.data?.error || 'Login failed. Please try again.');
         } finally {
@@ -60,7 +64,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                     placeholder="you@example.com"
                 />
                 </div>
@@ -74,7 +78,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg text-[#2C3E2C] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5F7464]"
                     placeholder="••••••••"
                 />
                 </div>

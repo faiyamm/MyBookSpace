@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('user_data', JSON.stringify(userData));
             setToken(access_token);
             setUser(userData);
-            return true;
+            return userData; // Return user data for redirect logic
         } catch (err) {
             console.error('Login error:', err);
             throw err;

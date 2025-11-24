@@ -52,7 +52,13 @@ export default function MyLoans() {
         });
     };
 
-    const activeLoans = loans.filter(l => l.status === 'active' || l.status === 'overdue');
+    // Backend uses 'On Loan', 'Overdue', 'Returned'
+    const activeLoans = loans.filter(l => 
+        l.status === 'On Loan' || 
+        l.status === 'Overdue' || 
+        l.status === 'active' || 
+        l.status === 'overdue'
+    );
 
     if (loading) {
         return (
