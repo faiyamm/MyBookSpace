@@ -1,0 +1,40 @@
+================================================================================
+SEARCH OPTIMIZATION PROFILING RESULTS
+================================================================================
+Generated: 2025-11-23 19:25:53
+Database: SQLite (app.db)
+Test iterations: 50 searches
+
+PERFORMANCE METRICS:
+--------------------------------------------------------------------------------
+Before optimization:
+  Total time:       4.4714 seconds
+  Average per search: 0.0894 seconds
+
+After optimization:
+  Total time:       3.9887 seconds
+  Average per search: 0.0798 seconds
+
+Improvement:       10.79%
+Speedup factor:    1.12x faster
+
+OPTIMIZATIONS APPLIED:
+--------------------------------------------------------------------------------
+1. Database Indexes:
+   - idx_book_title on Books.title
+   - idx_book_author on Books.author
+   - idx_book_genre on Books.genre
+
+2. Query Optimization:
+   - Applied LIMIT clause to restrict result set
+   - Reduced full table scans
+
+KEY INSIGHTS:
+--------------------------------------------------------------------------------
+Performance improved by 10.79%
+Queries are now 1.12x faster
+Database indexes significantly reduce search time
+
+================================================================================
+End of Report
+================================================================================

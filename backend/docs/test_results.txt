@@ -1,0 +1,88 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\kokow\MyBookSpace\backend\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\kokow\MyBookSpace\backend
+collecting ... collected 14 items
+
+tests/test_auth.py::TestAuthentication::test_user_registration_success PASSED [  7%]
+tests/test_auth.py::TestAuthentication::test_user_registration_duplicate_email PASSED [ 14%]
+tests/test_auth.py::TestAuthentication::test_user_registration_missing_fields PASSED [ 21%]
+tests/test_auth.py::TestAuthentication::test_user_login_success PASSED   [ 28%]
+tests/test_auth.py::TestAuthentication::test_user_login_invalid_credentials PASSED [ 35%]
+tests/test_auth.py::TestAuthentication::test_admin_login_returns_admin_role PASSED [ 42%]
+tests/test_loans.py::TestLoansAndCatalog::test_get_all_books FAILED      [ 50%]
+tests/test_loans.py::TestLoansAndCatalog::test_create_book_as_admin FAILED [ 57%]
+tests/test_loans.py::TestLoansAndCatalog::test_reserve_book_success FAILED [ 64%]
+tests/test_loans.py::TestLoansAndCatalog::test_reserve_unavailable_book_fails FAILED [ 71%]
+tests/test_loans.py::TestLoansAndCatalog::test_get_user_loans FAILED     [ 78%]
+tests/test_loans.py::TestLoansAndCatalog::test_return_book_success FAILED [ 85%]
+tests/test_loans.py::TestLoansAndCatalog::test_search_books_by_title FAILED [ 92%]
+tests/test_loans.py::TestLoansAndCatalog::test_get_book_by_id PASSED     [100%]
+
+================================== FAILURES ===================================
+___________________ TestLoansAndCatalog.test_get_all_books ____________________
+tests\test_loans.py:13: in test_get_all_books
+    assert 'books' in response.json
+E   AssertionError: assert 'books' in [{'author': 'Test Author 1', 'available_copies': 5, 'cover_url': None, 'description': None, ...}, {'author': 'Test Author 2', 'available_copies': 2, 'cover_url': None, 'description': None, ...}, {'author': 'Test Author 3', 'available_copies': 0, 'cover_url': None, 'description': None, ...}]
+E    +  where [{'author': 'Test Author 1', 'available_copies': 5, 'cover_url': None, 'description': None, ...}, {'author': 'Test Author 2', 'available_copies': 2, 'cover_url': None, 'description': None, ...}, {'author': 'Test Author 3', 'available_copies': 0, 'cover_url': None, 'description': None, ...}] = <WrapperTestResponse 535 bytes [200 OK]>.json
+________________ TestLoansAndCatalog.test_create_book_as_admin ________________
+tests\test_loans.py:33: in test_create_book_as_admin
+    assert response.json['book']['available_copies'] == 5
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'available_copies'
+---------------------------- Captured stdout call -----------------------------
+OpenLibrary API error: 404
+________________ TestLoansAndCatalog.test_reserve_book_success ________________
+tests\test_loans.py:47: in test_reserve_book_success
+    assert response.status_code == 201
+E   assert 404 == 201
+E    +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+___________ TestLoansAndCatalog.test_reserve_unavailable_book_fails ___________
+tests\test_loans.py:66: in test_reserve_unavailable_book_fails
+    assert response.status_code == 400
+E   assert 404 == 400
+E    +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+___________________ TestLoansAndCatalog.test_get_user_loans ___________________
+tests\test_loans.py:75: in test_get_user_loans
+    assert response.status_code == 200
+E   assert 404 == 200
+E    +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+________________ TestLoansAndCatalog.test_return_book_success _________________
+tests\test_loans.py:93: in test_return_book_success
+    assert response.status_code == 200
+E   assert 404 == 200
+E    +  where 404 = <WrapperTestResponse streamed [404 NOT FOUND]>.status_code
+_______________ TestLoansAndCatalog.test_search_books_by_title ________________
+tests\test_loans.py:106: in test_search_books_by_title
+    assert len(response.json['books']) >= 1
+               ^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: list indices must be integers or slices, not str
+============================== warnings summary ===============================
+tests/test_auth.py: 18 warnings
+tests/test_loans.py: 32 warnings
+  C:\Users\kokow\MyBookSpace\backend\venv\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_auth.py: 4 warnings
+tests/test_loans.py: 8 warnings
+  C:\Users\kokow\MyBookSpace\backend\app\models.py:75: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.loan_date = datetime.utcnow()
+
+tests/test_loans.py::TestLoansAndCatalog::test_return_book_success
+  C:\Users\kokow\MyBookSpace\backend\tests\test_loans.py:87: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    initial_available = Book.query.get(book_id).available_copies
+
+tests/test_loans.py::TestLoansAndCatalog::test_get_book_by_id
+  C:\Users\kokow\MyBookSpace\backend\app\routes\catalog.py:121: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    book = Book.query.get(book_id)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_loans.py::TestLoansAndCatalog::test_get_all_books - Asserti...
+FAILED tests/test_loans.py::TestLoansAndCatalog::test_create_book_as_admin - ...
+FAILED tests/test_loans.py::TestLoansAndCatalog::test_reserve_book_success - ...
+FAILED tests/test_loans.py::TestLoansAndCatalog::test_reserve_unavailable_book_fails
+FAILED tests/test_loans.py::TestLoansAndCatalog::test_get_user_loans - assert...
+FAILED tests/test_loans.py::TestLoansAndCatalog::test_return_book_success - a...
+FAILED tests/test_loans.py::TestLoansAndCatalog::test_search_books_by_title
+================== 7 failed, 7 passed, 64 warnings in 14.29s ==================

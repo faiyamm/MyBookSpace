@@ -92,13 +92,28 @@ def add_book():
         'isbn': new_book.isbn,
         'title': new_book.title,
         'author': new_book.author,
-        'cover_url': new_book.cover_url
+        'genre': new_book.genre,
+        'total_copies': new_book.total_copies,
+        'available_copies': new_book.available_copies,
+        'cover_url': new_book.cover_url,
+        'description': new_book.description
     }}), 201
 
 # ruta para obtener lista de libros 
 @catalog.route('/books', methods=['GET'])
 def get_books():
-    books = Book.query.all()
+    # Check for search query
+    search = request.args.get('search', '')
+    
+    if search:
+        books = Book.query.filter(
+            (Book.title.ilike(f'%{search}%')) |
+            (Book.author.ilike(f'%{search}%')) |
+            (Book.isbn.ilike(f'%{search}%'))
+        ).all()
+    else:
+        books = Book.query.all()
+    
     output = []
     for book in books:
         output.append({
@@ -112,7 +127,7 @@ def get_books():
             'cover_url': book.cover_url,
             'description': book.description
         })
-    return jsonify(output), 200
+    return jsonify({'books': output}), 200
 
 # ruta para obtener un libro específico
 @catalog.route('/books/<int:book_id>', methods=['GET'])

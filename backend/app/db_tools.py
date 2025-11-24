@@ -13,13 +13,17 @@ def seed_db():
         print("Database restarted.")
         
         admin = User(
-            email='admin@mybookspace.com',
-            password='adminpass',
+            email='admin@library.com',
+            password=generate_password_hash('admin123', method='scrypt'),
+            first_name='Admin',
+            last_name='User',
             role='admin'
         )
         user = User(
             email='user@test.com',
-            password='userpass',
+            password=generate_password_hash('userpass', method='scrypt'),
+            first_name='Test',
+            last_name='User',
             role='user'
         )
 
@@ -56,7 +60,7 @@ def seed_db():
         db.session.add_all([admin, user] + Books_test)
         db.session.commit()
         print("Database seeded with initial data.")
-        print(f"Admin credentials - Email: {admin.email}, Password: adminpass")
+        print(f"Admin credentials - Email: {admin.email}, Password: admin123")
         print(f"User credentials - Email: {user.email}, Password: userpass")
 
 if __name__ == '__main__':
