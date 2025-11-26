@@ -7,7 +7,7 @@ def fetch_book_by_isbn(isbn):
     try:
         clean_isbn = isbn.replace('-', '').replace(' ', '')
         url = f'https://openlibrary.org/isbn/{clean_isbn}.json'
-        response = requests.get(url, timeout=5)
+        response = requests.get(url, timeout=15)
 
         if response.status_code != 200:
             print(f"OpenLibrary API error: {response.status_code}")
@@ -41,7 +41,7 @@ def fetch_book_by_isbn(isbn):
             author_key = data['authors'][0].get('key', '')
             if author_key:
                 author_url = f'https://openlibrary.org{author_key}.json'
-                author_response = requests.get(author_url, timeout=5)
+                author_response = requests.get(author_url, timeout=15)
                 if author_response.status_code == 200:
                     author_data = author_response.json()
                     book_info['author'] = author_data.get('name', 'Unknown Author')
@@ -51,14 +51,14 @@ def fetch_book_by_isbn(isbn):
             work_key = data['works'][0].get('key', '')
             if work_key:
                 work_url = f'https://openlibrary.org{work_key}.json'
-                work_response = requests.get(work_url, timeout=5)
+                work_response = requests.get(work_url, timeout=15)
                 if work_response.status_code == 200:
                     work_data = work_response.json()
                     if 'authors' in work_data and work_data['authors']:
                         author_key = work_data['authors'][0].get('author', {}).get('key', '')
                         if author_key:
                             author_url = f'https://openlibrary.org{author_key}.json'
-                            author_response = requests.get(author_url, timeout=5)
+                            author_response = requests.get(author_url, timeout=15)
                             if author_response.status_code == 200:
                                 author_data = author_response.json()
                                 book_info['author'] = author_data.get('name', 'Unknown Author')

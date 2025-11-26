@@ -1,0 +1,79 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.1, pluggy-1.6.0
+rootdir: C:\Users\kokow\MyBookSpace\backend
+plugins: cov-7.0.0
+collected 14 items
+
+tests\test_auth.py ......                                                [ 42%]
+C:\Users\kokow\MyBookSpace\backend\venv\Lib\site-packages\_pytest\unraisableexception.py:33: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x000001A73F63F3D0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\kokow\MyBookSpace\backend\venv\Lib\site-packages\_pytest\unraisableexception.py:33: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x000001A73F63DE40>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\kokow\MyBookSpace\backend\venv\Lib\site-packages\_pytest\unraisableexception.py:33: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x000001A73F4EA5C0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+tests\test_loans.py ........                                             [100%]
+
+============================== warnings summary ===============================
+tests/test_auth.py: 18 warnings
+tests/test_loans.py: 32 warnings
+  C:\Users\kokow\MyBookSpace\backend\venv\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_auth.py: 4 warnings
+tests/test_loans.py: 9 warnings
+  C:\Users\kokow\MyBookSpace\backend\app\models.py:75: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.loan_date = datetime.utcnow()
+
+tests/test_loans.py::TestLoansAndCatalog::test_reserve_book_success
+tests/test_loans.py::TestLoansAndCatalog::test_reserve_unavailable_book_fails
+  C:\Users\kokow\MyBookSpace\backend\app\routes\loans.py:41: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    book = Book.query.get(book_id)
+
+tests/test_loans.py::TestLoansAndCatalog::test_reserve_book_success
+tests/test_loans.py::TestLoansAndCatalog::test_get_user_loans
+  C:\Users\kokow\MyBookSpace\backend\app\models.py:83: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    if datetime.utcnow() > self.expiration_date:
+
+tests/test_loans.py::TestLoansAndCatalog::test_reserve_book_success
+  C:\Users\kokow\MyBookSpace\backend\tests\test_loans.py:52: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    book = Book.query.get(book_id)
+
+tests/test_loans.py::TestLoansAndCatalog::test_return_book_success
+  C:\Users\kokow\MyBookSpace\backend\tests\test_loans.py:87: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    initial_available = Book.query.get(book_id).available_copies
+
+tests/test_loans.py::TestLoansAndCatalog::test_return_book_success
+  C:\Users\kokow\MyBookSpace\backend\app\routes\loans.py:122: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    loan = Loan.query.get(loan_id)
+
+tests/test_loans.py::TestLoansAndCatalog::test_return_book_success
+  C:\Users\kokow\MyBookSpace\backend\app\routes\loans.py:127: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    loan.return_date = datetime.utcnow()
+
+tests/test_loans.py::TestLoansAndCatalog::test_return_book_success
+  C:\Users\kokow\MyBookSpace\backend\tests\test_loans.py:98: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    book = Book.query.get(book_id)
+
+tests/test_loans.py::TestLoansAndCatalog::test_get_book_by_id
+  C:\Users\kokow\MyBookSpace\backend\app\routes\catalog.py:136: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    book = Book.query.get(book_id)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.7-final-0 _______________
+
+Name                        Stmts   Miss  Cover
+-----------------------------------------------
+app\__init__.py                28      1    96%
+app\db_tools.py                21     21     0%
+app\models.py                  66     13    80%
+app\routes\auth.py             35      1    97%
+app\routes\catalog.py         123     65    47%
+app\routes\loans.py           105     51    51%
+app\utils\external_api.py      50     41    18%
+-----------------------------------------------
+TOTAL                         428    193    55%
+====================== 14 passed, 73 warnings in 12.03s =======================

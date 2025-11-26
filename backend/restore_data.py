@@ -5,33 +5,65 @@ from werkzeug.security import generate_password_hash
 app = create_app()
 
 with app.app_context():
-    # Delete test books (books with titles starting with "Test Book")
-    print("Deleting test books...")
-    test_books = Book.query.filter(Book.title.like('Test Book%')).all()
-    for book in test_books:
-        db.session.delete(book)
-    print(f"Deleted {len(test_books)} test books")
+    print("Restoring database...")
     
-    # Add admin account
-    print("\nAdding admin account...")
-    existing_admin = User.query.filter_by(email='admin@library.com').first()
+    # Create admin user
+    admin = User(
+        email='admin@library.com',
+        password=generate_password_hash('admin123', method='scrypt'),
+        first_name='Admin',
+        last_name='User',
+        role='admin'
+    )
     
-    if existing_admin:
-        print("Admin already exists!")
-    else:
-        admin = User(
-            email='admin@library.com',
-            password=generate_password_hash('admin123', method='scrypt'),
-            first_name='Admin',
-            last_name='User',
-            role='admin'
-        )
-        db.session.add(admin)
-        print("Admin account created")
+    # Create regular user
+    user = User(
+        email='user@test.com',
+        password=generate_password_hash('userpass', method='scrypt'),
+        first_name='Test',
+        last_name='User',
+        role='user'
+    )
     
+    # Create original books
+    books = [
+        Book(
+            isbn='978-0143039126', 
+            title='Dune', 
+            author='Frank Herbert', 
+            genre='Fiction', 
+            total_copies=10, 
+            available_copies=2,
+            cover_url='https://m.media-amazon.com/images/I/71oO1E-XPuL._AC_UF1000,1000_QL80_.jpg'
+        ),
+        Book(
+            isbn='978-0684801223', 
+            title='The Old Man and the Sea', 
+            author='Ernest Hemingway', 
+            genre='Fiction', 
+            total_copies=5, 
+            available_copies=3,
+            cover_url='https://m.media-amazon.com/images/I/81uaGXiRF4L._AC_UF1000,1000_QL80_.jpg'
+        ),
+        Book(
+            isbn='978-0593490729', 
+            title='Martyr!', 
+            author='Kaveh Akbar', 
+            genre='Fiction', 
+            total_copies=8, 
+            available_copies=8,
+            cover_url='https://m.media-amazon.com/images/I/71QOp6F4cPL._AC_UF1000,1000_QL80_.jpg'
+        ),
+    ]
+    
+    db.session.add(admin)
+    db.session.add(user)
+    db.session.add_all(books)
     db.session.commit()
     
-    print("\n✅ Data restored successfully!")
-    print(f"   Admin: admin@library.com / admin123")
-    print(f"   Total users: {User.query.count()}")
-    print(f"   Total books: {Book.query.count()}")
+    print("Database restored successfully!")
+    print(f"\nAccounts:")
+    print(f"  Admin: admin@library.com / admin123")
+    print(f"  User:  user@test.com / userpass")
+    print(f"\nBooks: {Book.query.count()} books added")
+    print(f"Users: {User.query.count()} users added")

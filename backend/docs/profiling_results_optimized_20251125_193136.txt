@@ -1,0 +1,23 @@
+================================================================================
+SECOND OPTIMIZATION PROFILING RESULTS
+================================================================================
+Generated: 2025-11-25 19:31:36
+Database: SQLite (app.db)
+Test iterations: 50 searches
+
+FURTHER OPTIMIZATIONS APPLIED:
+--------------------------------------------------------------------------------
+1. Bulk insert operations using bulk_save_objects()
+2. Reduced batch size from 100 to 50 records
+3. Query optimization: Select only required columns (id, title)
+4. Reduced LIMIT from 100 to 50 results
+5. Connection reuse within app context
+
+PERFORMANCE METRICS:
+--------------------------------------------------------------------------------
+Total time:         2.4593 seconds
+Average per search: 0.0492 seconds
+
+================================================================================
+End of Report
+================================================================================

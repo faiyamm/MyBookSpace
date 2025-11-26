@@ -1,0 +1,179 @@
+================================================================================
+UNIT TESTING: BEFORE AND AFTER COMPARISON
+================================================================================
+Generated: November 25, 2025
+Project: MyBookSpace Library Management System
+
+================================================================================
+INITIAL TEST RESULTS (BEFORE FIXES)
+================================================================================
+
+Test Run: November 23, 2025
+Total Tests: 14
+Passed: 7
+Failed: 7
+Success Rate: 50%
+
+FAILED TESTS:
+--------------------------------------------------------------------------------
+
+1. test_get_all_books
+   Status: FAILED
+   Error: AssertionError: assert 'books' in [...]
+   Issue: API endpoint returned array directly instead of wrapped in {'books': [...]}
+   
+2. test_create_book_as_admin
+   Status: FAILED
+   Error: KeyError: 'available_copies'
+   Issue: Response missing 'available_copies' field in nested book object
+   
+3. test_reserve_book_success
+   Status: FAILED
+   Error: assert 404 == 201
+   Issue: Missing POST /api/loans/reserve/<book_id> endpoint
+   
+4. test_reserve_unavailable_book_fails
+   Status: FAILED
+   Error: assert 404 == 400
+   Issue: Missing POST /api/loans/reserve/<book_id> endpoint
+   
+5. test_get_user_loans
+   Status: FAILED
+   Error: assert 404 == 200
+   Issue: Missing GET /api/loans/my-loans endpoint (only had /myLoans)
+   
+6. test_return_book_success
+   Status: FAILED
+   Error: assert 404 == 200
+   Issue: Missing POST /api/loans/return/<loan_id> endpoint
+   
+7. test_search_books_by_title
+   Status: FAILED
+   Error: TypeError: list indices must be integers or slices, not str
+   Issue: Search endpoint returned array instead of {'books': [...]}
+
+================================================================================
+FIXES APPLIED
+================================================================================
+
+Fix #1: Catalog GET /books Endpoint
+File: backend/app/routes/catalog.py
+Change: Modified response to wrap books array in object with 'books' key
+Before: return jsonify(output), 200
+After:  return jsonify({'books': output}), 200
+Additionally: Added search functionality with query parameter support
+
+Fix #2: Catalog POST /books Endpoint
+File: backend/app/routes/catalog.py
+Change: Added all book fields to response including available_copies
+Before: Returned only id, isbn, title, author, cover_url
+After:  Returns complete book object with all fields including:
+        - available_copies
+        - total_copies
+        - genre
+        - description
+
+Fix #3: Loans Reserve Endpoint
+File: backend/app/routes/loans.py
+Change: Added new route POST /api/loans/reserve/<book_id>
+Implementation:
+  - Accepts book_id as URL parameter
+  - Validates book exists and has available copies
+  - Creates loan and decrements available_copies
+  - Returns 201 with loan data on success
+
+Fix #4: Loans My-Loans Endpoint
+File: backend/app/routes/loans.py
+Change: Added new route GET /api/loans/my-loans (kebab-case alias)
+Implementation:
+  - Returns user's loans wrapped in {'loans': [...]} object
+  - Maintains backward compatibility with /myLoans endpoint
+
+Fix #5: Loans Return Endpoint
+File: backend/app/routes/loans.py
+Change: Added new route POST /api/loans/return/<loan_id>
+Implementation:
+  - Accepts loan_id as URL parameter
+  - Validates loan belongs to current user
+  - Updates loan status to 'Returned'
+  - Increments book's available_copies
+  - Returns success message
+
+Fix #6: Database Seeding Issue
+File: backend/app/db_tools.py
+Change: Added password hashing to seed script
+Issue: Passwords were stored as plain text, login failed
+Before: password='adminpass'
+After:  password=generate_password_hash('admin123', method='scrypt')
+
+================================================================================
+FINAL TEST RESULTS (AFTER FIXES)
+================================================================================
+
+Test Run: November 23, 2025 (After fixes)
+Total Tests: 14
+Passed: 14
+Failed: 0
+Success Rate: 100%
+
+PASSED TESTS:
+--------------------------------------------------------------------------------
+✓ test_user_registration_success
+✓ test_user_registration_duplicate_email
+✓ test_user_registration_missing_fields
+✓ test_user_login_success
+✓ test_user_login_invalid_credentials
+✓ test_admin_login_returns_admin_role
+✓ test_get_all_books
+✓ test_create_book_as_admin
+✓ test_reserve_book_success
+✓ test_reserve_unavailable_book_fails
+✓ test_get_user_loans
+✓ test_return_book_success
+✓ test_search_books_by_title
+✓ test_get_book_by_id
+
+================================================================================
+IMPROVEMENT SUMMARY
+================================================================================
+
+Before Fixes:
+  - 7 failed tests (50% failure rate)
+  - API response format inconsistencies
+  - Missing critical endpoints
+  - Authentication issues
+
+After Fixes:
+  - 0 failed tests (100% success rate)
+  - Consistent API response format
+  - All required endpoints implemented
+  - Authentication working correctly
+
+Test Success Rate Improvement: +50 percentage points (50% → 100%)
+
+Key Achievements:
+  ✓ Fixed all API response format issues
+  ✓ Implemented missing RESTful endpoints
+  ✓ Added proper password hashing
+  ✓ Maintained backward compatibility
+  ✓ Added search functionality
+
+================================================================================
+TECHNICAL DETAILS
+================================================================================
+
+Testing Framework: pytest 9.0.1
+Python Version: 3.13.7
+Database: SQLite (in-memory for tests)
+Authentication: JWT with Flask-JWT-Extended
+
+Warnings: 73 deprecation warnings (non-critical)
+  - datetime.utcnow() deprecations (Python 3.13)
+  - SQLAlchemy Query.get() legacy warnings
+
+These warnings do not affect functionality and can be addressed in future
+refactoring.
+
+================================================================================
+END OF REPORT
+================================================================================
