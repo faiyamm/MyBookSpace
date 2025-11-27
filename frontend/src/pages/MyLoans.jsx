@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { loansAPI } from '../services/api';
 import Layout from '../components/Layout';
 import { LoanCard } from '../components/cards';
+import ConfirmModal from '../components/ui/ConfirmModal';
 
 export default function MyLoans() {
     const [loans, setLoans] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [returnConfirm, setReturnConfirm] = useState(null);
 
     useEffect(() => {
         loadLoans();
@@ -33,7 +35,11 @@ export default function MyLoans() {
     };
 
     const handleReturn = async (loanId) => {
-        if (!window.confirm('Are you sure you want to return this book?')) return;
+        setReturnConfirm(loanId);
+    };
+
+    const confirmReturn = async () => {
+        const loanId = returnConfirm;
         
         try {
         await loansAPI.returnBook(loanId);
@@ -101,6 +107,17 @@ export default function MyLoans() {
             )}
             </div>
         </div>
+
+        {/* Return Confirmation Modal */}
+        <ConfirmModal
+            isOpen={returnConfirm !== null}
+            onClose={() => setReturnConfirm(null)}
+            onConfirm={confirmReturn}
+            title="Return Book"
+            message="Are you sure you want to return this book?"
+            confirmText="Return"
+            confirmVariant="primary"
+        />
         </Layout>
     );
 }

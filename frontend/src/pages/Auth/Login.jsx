@@ -101,8 +101,13 @@ export default function LoginPage() {
             </div>
 
             {/* Hint para testing */}
-            <div className="mt-4 text-center text-xs text-[#5F7464]">
-            <p>Test account: admin@library.com / admin123</p>
+            <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+            <p className="text-xs font-semibold text-[#2C3E2C] mb-2">Test Accounts:</p>
+            <div className="space-y-1 text-xs text-[#5F7464]">
+                <p>• Admin: admin@library.com / admin123</p>
+                <p>• User 1: user@test.com / userpass</p>
+                <p>• User 2: john@test.com / john123</p>
+            </div>
             </div>
         </div>
         </div>

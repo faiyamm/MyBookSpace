@@ -5,6 +5,7 @@ import { catalogAPI, loansAPI } from '../services/api';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import BaseCard from '../components/cards/BaseCard';
+import ConfirmModal from '../components/ui/ConfirmModal';
 import { Bell, Plus, DollarSign, Search, Edit2, Trash2, X } from 'lucide-react';
 
 export default function AdminPanel() {
@@ -15,6 +16,8 @@ export default function AdminPanel() {
     const [editingBook, setEditingBook] = useState(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [deleteConfirm, setDeleteConfirm] = useState(null);
+    const [logoutConfirm, setLogoutConfirm] = useState(false);
     
     // Data
     const [books, setBooks] = useState([]);
@@ -155,7 +158,11 @@ export default function AdminPanel() {
     };
 
     const handleDeleteBook = async (bookId) => {
-        if (!window.confirm('Are you sure you want to delete this book?')) return;
+        setDeleteConfirm(bookId);
+    };
+
+    const confirmDelete = async () => {
+        const bookId = deleteConfirm;
         
         try {
         await catalogAPI.deleteBook(bookId);
@@ -262,12 +269,7 @@ export default function AdminPanel() {
                                 View User Dashboard
                             </button>
                             <button
-                                onClick={() => {
-                                    if (window.confirm('Are you sure you want to logout?')) {
-                                        logout();
-                                        navigate('/login');
-                                    }
-                                }}
+                                onClick={() => setLogoutConfirm(true)}
                                 className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2 text-red-600"
                             >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -770,6 +772,31 @@ export default function AdminPanel() {
         </div>
         </div>
     )}
+
+    {/* Delete Confirmation Modal */}
+    <ConfirmModal
+        isOpen={deleteConfirm !== null}
+        onClose={() => setDeleteConfirm(null)}
+        onConfirm={confirmDelete}
+        title="Delete Book"
+        message="Are you sure you want to delete this book? This action cannot be undone."
+        confirmText="Delete"
+        danger={true}
+    />
+
+    {/* Logout Confirmation Modal */}
+    <ConfirmModal
+        isOpen={logoutConfirm}
+        onClose={() => setLogoutConfirm(false)}
+        onConfirm={() => {
+            logout();
+            navigate('/login');
+        }}
+        title="Logout"
+        message="Are you sure you want to logout?"
+        confirmText="Logout"
+        danger={true}
+    />
     </div>
     );
 }
